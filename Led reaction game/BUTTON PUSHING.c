@@ -1,30 +1,75 @@
 /*
-  * Sam Yarbrough
-  * Use a button to do LED things 
-  * Program #5
-  * 06/14/17
+  * Sam Yarbrough 
+  * Rection game witf te LEDs and button
 */
 #include "simpletools.h"                     
 
-int main()                                    
+int main()                                 
 {
+  
+   int timeCounter;
+   char playAgain = 'Y';
+   int interval;
+   float averageScore = 0;
+   int rounds = 0;
+   int best = 1500;
+   
+   srand(CNT);
+   
+    print("Game Instructions: \n");
+    print("The red LED will turn on when the game starts.\n");
+    print("When the blue LED turns on, \n");
+    print("Let go of the button as the bottun as fast as you can.\n\n");
+   
  
-  while(1)
+  while(playAgain == 'Y' || playAgain == 'y')
   {
-    if ( input(0) == 1 )
-    { 
-      putChar(HOME);
-      print("The button is pressed %c\n", CLREOL);
-      high(15);
-      low(14);
-    }   
-    else
-    {
-      putChar(HOME);
-      print("The button is not pressed %c\n", CLREOL);
-      low(15);
-      high(14);
-    }    
-    pause(100);           
-  }  
+   print("Press and hold the button to start.\n");
+   while (input(0) == 0) 
+   {
+    // intentionally empty loooop 
+   }
+   
+   high(15);
+   low(14);
+   
+   interval = (rand() % 1001) + 500;
+   pause(interval);
+   
+   low(15);
+   high(14);
+   
+   timeCounter = 0;
+   while (input(0) == 1)
+   {
+     pause(1);
+     timeCounter = timeCounter + 1;
+   }
+   low(14);
+   
+   if (timeCounter > 0)
+   {
+     rounds = rounds + 1;
+     averageScore = averageScore + timeCounter;
+     print("Your time was %d ms.\n", timeCounter);
+     
+     if (timeCounter < best)
+     {
+       best = timeCounter;
+     }       
+     
+   } 
+   else
+   {
+     print("Why did you let go of the button? You were told NOT to.\n");
+   }
+   
+     print("Would you like to play again? (Y/n) ");
+     scan("%c", &playAgain);                          
+ }        // end of while loooooooop 
+ 
+   print("Why must you leave this dank programed game? Your average score was %0.2f ms.\n", averageScore);
+   print("Your best time was %d ms.\n", best);\
+   
+   return 0;
 }
